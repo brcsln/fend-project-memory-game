@@ -80,6 +80,11 @@ function userClickedToCard(){
     if ( beginCheckState() == false ){
         return;
     }
+
+    if ( firstOpenedCard === this ){
+        return;
+    }
+
     clickCounter = clickCounter - 1;
     moveCounter++;
     updateMoves();
