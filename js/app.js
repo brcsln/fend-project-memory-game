@@ -1,12 +1,44 @@
 /*
  * Create a list that holds all of your cards
  */
-var listOfObjects = [];
-var listOfObjects = document.getElementsByClassName("card");
-var firstOpenedCard = null;
-var clickCounter = 2;
 
-activateClick();
+var listOfObjects, rObject;
+var firstOpenedCard, clickCounter, moveCounter, moves;
+
+
+function startGame(){
+    initElements();
+    activateClick();
+}
+
+function restartGame(){      
+    var newGameHTML = "", cardName, i;
+    var order = [];
+
+    for (i = 0; i < listOfObjects.length; i++){
+        order.push(i);
+    }
+    order = shuffle(order);
+
+    for (i = 0; i < listOfObjects.length; i++) { 
+        cardName = getCardName(listOfObjects[order[i]]);       
+        newGameHTML += "<li class='card'> <i class='"+ cardName + "'></i> </li>";
+    }
+    var deck = document.getElementsByClassName("deck")[0];
+    deck.innerHTML = newGameHTML;
+    
+    startGame();
+}
+
+function initElements(){
+    firstOpenedCard = null;
+    clickCounter = 2;
+    moveCounter = 0;    
+    listOfObjects = document.getElementsByClassName("card");
+    moves = document.getElementsByClassName("moves")[0];
+    rObject = document.getElementsByClassName("restart")[0];
+    updateMoves();
+}
 
 /*
  * Display the cards on the page
@@ -30,6 +62,9 @@ function shuffle(array) {
     return array;
 }
 
+function updateMoves(){    
+    moves.innerText = moveCounter;//moveCounter.toString();
+}
 
 /*
  * set up the event listener for a card. If a card is clicked:
@@ -46,7 +81,8 @@ function userClickedToCard(){
         return;
     }
     clickCounter = clickCounter - 1;
-    
+    moveCounter++;
+    updateMoves();
     var className = this.className;
     switch(className) {
         case "card":
@@ -124,6 +160,8 @@ function activateClick(){
     for (i = 0; i < listOfObjects.length; i++) {
         listOfObjects[i].addEventListener("click", userClickedToCard);
     }
+    if ( rObject )
+        rObject.addEventListener("click", restartGame);
 }
 
 function deactivateClick(){
@@ -131,5 +169,17 @@ function deactivateClick(){
     for (i = 0; i < listOfObjects.length; i++) {
         listOfObjects[i].removeEventListener("click", userClickedToCard);
     }
-    return;
+    if ( rObject)
+        rObject.removeEventListener("click", restartGame);
 }
+
+
+function setCardDefaultAll(){
+    var i;
+    for (i = 0; i < listOfObjects.length; i++) {
+        setCardDefault(listOfObjects[i]);
+    }
+}
+
+
+startGame();
