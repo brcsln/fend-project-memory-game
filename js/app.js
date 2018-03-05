@@ -4,7 +4,7 @@
 
 var listOfObjects, rObject;
 var firstOpenedCard, clickCounter, moveCounter, moves, starCounter, stars;
-var totalStar = 3;
+var totalStar = 3, totalCard = 16;
 
 function startGame(){
     initElements();
@@ -70,9 +70,9 @@ function updateMoves(){
 }
 
 function updateNumberOfStars() {
-    if ( moveCounter < 15 ){
+    if ( moveCounter < 20 ){
         starCounter = 3;
-    } else if ( moveCounter < 20 ) {
+    } else if ( moveCounter < 25 ) {
         starCounter = 2;
     } else {
         starCounter = 1;
@@ -120,7 +120,6 @@ function userClickedToCard(){
     }
 
     clickCounter = clickCounter - 1;
-
     updateStatistics();
 
     var className = this.className;
@@ -165,10 +164,24 @@ function setCardDefault(obj){
     obj.className = "card";
 }
 
+function gameFinished(){
+    if ( document.getElementsByClassName("card match").length != totalCard ){
+        return false;
+    }
+    return true;
+}
+
 function matchStateFunc(obj1, obj2){
     setCardAsMatched(obj1);
     setCardAsMatched(obj2);
-    afterCheckState();
+    if ( gameFinished() ){
+        setTimeout(function(){
+            alert("Game Finished!");
+            restartGame();
+        }, 2000);
+    } else {
+        afterCheckState();
+    }
 }
 
 function wrongMatchStateFunc(obj1, obj2){
