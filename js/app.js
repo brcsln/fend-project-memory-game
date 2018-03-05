@@ -1,7 +1,12 @@
 /*
  * Create a list that holds all of your cards
  */
+var listOfObjects = [];
+var listOfObjects = document.getElementsByClassName("card");
+var firstOpenedCard = null;
+var clickCounter = 2;
 
+activateClick();
 
 /*
  * Display the cards on the page
@@ -36,3 +41,95 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+function userClickedToCard(){    
+    if ( beginCheckState() == false ){
+        return;
+    }
+    clickCounter = clickCounter - 1;
+    
+    var className = this.className;
+    switch(className) {
+        case "card":
+            displayCard(this);                        
+            if ( firstOpenedCard ){
+                secondCardName = getCardName(this);
+                if ( getCardName(firstOpenedCard) == secondCardName ){
+                    matchStateFunc(firstOpenedCard, this);
+                } else {
+                    wrongMatchStateFunc(firstOpenedCard, this);
+                }                
+            } else {
+                firstOpenedCard = this;
+            }
+               
+            break;
+        case "card show open":
+            // do nothing
+            break;
+        default:
+            // do nothing
+    }
+    
+}
+
+
+function displayCard(obj){
+    obj.className = "card show open";
+}
+
+function getCardName(obj){
+    return obj.getElementsByTagName("i")[0].className;
+}
+
+function setCardAsMatched(obj){
+    obj.className = "card match";
+}
+
+function setCardDefault(obj){
+    obj.className = "card";
+}
+
+function matchStateFunc(obj1, obj2){
+    setCardAsMatched(obj1);
+    setCardAsMatched(obj2);
+    afterCheckState();
+}
+
+function wrongMatchStateFunc(obj1, obj2){
+    setTimeout(function(){
+        setCardDefault(obj1);
+        setCardDefault(obj2);
+        afterCheckState();
+    }, 2000);
+    
+}
+
+function beginCheckState(){
+    var gameIsEnabled = true;
+
+    if ( clickCounter <= 0 ){
+        gameIsEnabled = false;
+        deactivateClick();        
+    } 
+    return gameIsEnabled;
+}
+function afterCheckState(){
+    firstOpenedCard = null;
+    clickCounter = 2;
+    activateClick();
+}
+
+function activateClick(){
+    var i;
+    for (i = 0; i < listOfObjects.length; i++) {
+        listOfObjects[i].addEventListener("click", userClickedToCard);
+    }
+}
+
+function deactivateClick(){
+    var i;
+    for (i = 0; i < listOfObjects.length; i++) {
+        listOfObjects[i].removeEventListener("click", userClickedToCard);
+    }
+    return;
+}
