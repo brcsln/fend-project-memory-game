@@ -176,9 +176,9 @@ function matchStateFunc(obj1, obj2){
     setCardAsMatched(obj2);
     if ( gameFinished() ){
         setTimeout(function(){
-            alert("Game Finished!");
+            alert("Game Finished!\nWith "+ moveCounter +" Moves and "+ starCounter +" Stars.\nWoooooo!");
             restartGame();
-        }, 2000);
+        }, 1000);
     } else {
         afterCheckState();
     }
