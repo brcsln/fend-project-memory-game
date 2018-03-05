@@ -3,8 +3,8 @@
  */
 
 var listOfObjects, rObject;
-var firstOpenedCard, clickCounter, moveCounter, moves;
-
+var firstOpenedCard, clickCounter, moveCounter, moves, starCounter, stars;
+var totalStar = 3;
 
 function startGame(){
     initElements();
@@ -33,11 +33,14 @@ function restartGame(){
 function initElements(){
     firstOpenedCard = null;
     clickCounter = 2;
-    moveCounter = 0;    
+    moveCounter = 0;
+    starCounter = 3;    
     listOfObjects = document.getElementsByClassName("card");
     moves = document.getElementsByClassName("moves")[0];
     rObject = document.getElementsByClassName("restart")[0];
+    stars = document.getElementsByClassName("stars")[0];
     updateMoves();
+    updateStars();
 }
 
 /*
@@ -66,6 +69,37 @@ function updateMoves(){
     moves.innerText = moveCounter;//moveCounter.toString();
 }
 
+function updateNumberOfStars() {
+    if ( moveCounter < 15 ){
+        starCounter = 3;
+    } else if ( moveCounter < 20 ) {
+        starCounter = 2;
+    } else {
+        starCounter = 1;
+    }
+}
+
+function updateStars(){
+    var i, starHTML = "";
+    updateNumberOfStars();
+    for (i = 1; i <= starCounter; i++) {
+        starHTML += "<li><i class='fa fa-star'></i></li>";        
+    }
+
+    for(i = 1; i <= totalStar - starCounter; i++){
+        starHTML += "<li><i class='fa fa-star-o'></i></li>";
+    }
+    stars.innerHTML = starHTML;
+    stars = document.getElementsByClassName("stars")[0];
+}
+
+function updateStatistics(){
+    moveCounter++;
+    updateMoves();
+    updateStars();
+}
+
+
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
@@ -86,8 +120,9 @@ function userClickedToCard(){
     }
 
     clickCounter = clickCounter - 1;
-    moveCounter++;
-    updateMoves();
+
+    updateStatistics();
+
     var className = this.className;
     switch(className) {
         case "card":
