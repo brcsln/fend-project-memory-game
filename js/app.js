@@ -6,12 +6,32 @@ var listOfObjects, rObject;
 var firstOpenedCard, clickCounter, moveCounter, moves, starCounter, stars;
 var totalStar = 3, totalCard = 16;
 
+// https://stackoverflow.com/questions/5517597/plain-count-up-timer-in-javascript
+var minutesLabel = document.getElementById("minutes");
+var secondsLabel = document.getElementById("seconds");
+var totalSeconds = 0;
+
+function setTime() {
+    ++totalSeconds;
+    secondsLabel.innerHTML = pad(totalSeconds % 60);
+    minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+  }
+  
+  function pad(val) {
+    var valString = val + "";
+    if (valString.length < 2) {
+      return "0" + valString;
+    } else {
+      return valString;
+    }
+}
+    
 function startGame(){
     initElements();
     activateClick();
 }
 
-function restartGame(){      
+function restartGame(){ 
     var newGameHTML = "", cardName, i;
     var order = [];
 
@@ -31,6 +51,7 @@ function restartGame(){
 }
 
 function initElements(){
+    totalSeconds = 0;
     firstOpenedCard = null;
     clickCounter = 2;
     moveCounter = 0;
@@ -118,6 +139,9 @@ function userClickedToCard(){
     if ( firstOpenedCard === this ){
         return;
     }
+    if ( totalSeconds == 0) {
+        setInterval(setTime, 1000);
+    }
 
     clickCounter = clickCounter - 1;
     updateStatistics();
@@ -176,7 +200,7 @@ function matchStateFunc(obj1, obj2){
     setCardAsMatched(obj2);
     if ( gameFinished() ){
         setTimeout(function(){
-            alert("Game Finished!\nWith "+ moveCounter +" Moves and "+ starCounter +" Stars.\nWoooooo!");
+            alert("Game Finished in "+ pad(parseInt(totalSeconds / 60)) +" minutes "+pad(totalSeconds % 60) +" seconds !\nWith "+ moveCounter +" Moves and "+ starCounter +" Stars.\nWoooooo!");
             restartGame();
         }, 1000);
     } else {
@@ -233,6 +257,5 @@ function setCardDefaultAll(){
         setCardDefault(listOfObjects[i]);
     }
 }
-
 
 startGame();
