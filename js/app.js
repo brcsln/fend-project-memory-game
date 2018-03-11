@@ -10,13 +10,14 @@ var totalStar = 3, totalCard = 16;
 var minutesLabel = document.getElementById("minutes");
 var secondsLabel = document.getElementById("seconds");
 var totalSeconds = 0;
-
+/* Function to set time*/
 function setTime() {
     ++totalSeconds;
     secondsLabel.innerHTML = pad(totalSeconds % 60);
     minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
   }
-  
+
+  /* Function to set padding minutes or seconds put 0 prefix*/
   function pad(val) {
     var valString = val + "";
     if (valString.length < 2) {
@@ -25,12 +26,14 @@ function setTime() {
       return valString;
     }
 }
-    
+ 
+/* Function to start game with click*/
 function startGame(){
     initElements();
     activateClick();
 }
 
+/*Function to restart game play again  */
 function restartGame(){ 
     var newGameHTML = "", cardName, i;
     var order = [];
@@ -49,7 +52,7 @@ function restartGame(){
     
     startGame();
 }
-
+/*Function to set first initial values  */
 function initElements(){
     totalSeconds = 0;
     firstOpenedCard = null;
@@ -85,11 +88,11 @@ function shuffle(array) {
 
     return array;
 }
-
+/*Function to update move count*/ */
 function updateMoves(){    
     moves.innerText = moveCounter;//moveCounter.toString();
 }
-
+/*Function to update number of the stars on top*/
 function updateNumberOfStars() {
     if ( moveCounter < 20 ){
         starCounter = 3;
@@ -99,7 +102,7 @@ function updateNumberOfStars() {
         starCounter = 1;
     }
 }
-
+/*Function to update of stars counts */
 function updateStars(){
     var i, starHTML = "";
     updateNumberOfStars();
@@ -113,7 +116,7 @@ function updateStars(){
     stars.innerHTML = starHTML;
     stars = document.getElementsByClassName("stars")[0];
 }
-
+/*Function to update moves and stars */
 function updateStatistics(){
     moveCounter++;
     updateMoves();
