@@ -88,7 +88,7 @@ function shuffle(array) {
 
     return array;
 }
-/*Function to update move count*/ */
+/*Function to update move count*/
 function updateMoves(){    
     moves.innerText = moveCounter;//moveCounter.toString();
 }
